@@ -46,9 +46,10 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   angleMode(DEGREES);
   textAlign(CENTER, CENTER);
-  fill(255);
-  nickname = random(handles);
+
 }
+
+  
 
 function draw() {
   background(51);
@@ -61,12 +62,6 @@ function draw() {
 
   if (frameCount % updateRate === 0) {
     const data = {
-      accelerationX: accelerationX,
-      accelerationY: accelerationY,
-      accelerationZ: accelerationZ,
-      rotationX: rotationX,
-      rotationY: rotationY,
-      rotationZ: rotationZ,
       mouseX: mouseX,
       mouseY: mouseY,
       touches: touches,

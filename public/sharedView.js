@@ -26,7 +26,7 @@ function draw() {
 
   // arrange all users in a circle, using this radius in the
   // loop below.
-  const radius = min(width/2, height/2) * .8;
+  const radius = min(width / 2, height / 2) * .8;
 
   // we'll use this variable to do some math related to our
   // position in the loop over all the users.
@@ -37,73 +37,24 @@ function draw() {
   // for each entry in the map:
   //   - id (contains the key)
   //   - user (contains the value)
-  for(const [id, user] of users.entries()) {
+  for (const [id, user] of users.entries()) {
     
-    const angle = map(i, 0, users.size, 0, 360);
-    i++; // used i to calculate the angle, updating now because we're done w/ it
-    
-    // trigonometry! calculate a position around a circle without using rotate()
-    // because we don't want to actually rotate the shapes... yet.
-    const x = radius * cos(angle);
-    const y = radius * sin(angle);
-    
-    push();
-    
-    // we're using webGL here and all 3d shapes are drawn at
-    // 0,0 so we have to translate to where we want them to
-    // be drawn.
-    translate(x, y);
     
     if (user.name != undefined) {
       
       fill(255);
       text(user.name, 0, 20);
       
-      push();
-      
-      noStroke();
-      
-      // Z-X-Y order matters!! orient the axis like our phone.
-      rotateZ(user.rotationZ);
-      rotateX(user.rotationX);
-      rotateY(user.rotationY);
-      
-      // x-axis (red)
-      push();
-      fill(255, 0, 0);
-      translate(50, 0, 0);
-      box(100, 5, 5);
-      pop();
-      
-      // y-axis (green)
-      push();
-      fill(0, 255, 0);
-      translate(0, 50, 0);
-      box(5, 100, 5);
-      pop();
-      
-      //z-axis (blue)
-      push();
-      fill(0, 0, 255);
-      translate(0, 0, 50);
-      box(5, 5, 100);
-      pop();
-
-      pop();
-      
-      strokeWeight(5);
-      stroke(255);
       
       // also show touches on the screen, scaled down
       const sca = .25;
-      translate(-user.windowWidth/2 * sca, -user.windowHeight/2 * sca);
+      translate(-user.windowWidth / 2 * sca, -user.windowHeight / 2 * sca);
       for (const touch of user.touches) {
         point(touch.x * sca, touch.y * sca, 0);
       }
-      
       point(user.mouseX * sca, user.mouseY * sca);
+ 
     }
-    pop();
   }
 }
 
