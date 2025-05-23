@@ -47,9 +47,50 @@ function setup() {
   angleMode(DEGREES);
   textAlign(CENTER, CENTER);
 
-}
+  // Permission handling for device sensors
+  window.permissionGranted = false;
 
-  
+  // DeviceOrientationEvent, DeviceMotionEvent
+  if (
+    typeof DeviceOrientationEvent !== "undefined" &&
+    typeof DeviceOrientationEvent.requestPermission === "function"
+  ) {
+    // iOS 13+ device
+    DeviceOrientationEvent.requestPermission()
+      .catch(() => {
+        // show permission dialog only the first time
+        let button = createButton("click to allow access to sensors");
+        button.style("font-size", "24px");
+        button.center();
+        button.mousePressed(requestAccess);
+        throw null;
+      })
+      .then((response) => {
+        if (response === "granted") {
+          window.permissionGranted = true;
+        }
+      });
+  } else {
+    // non iOS 13+ device
+    window.permissionGranted = true;
+  }
+
+  function requestAccess() {
+    DeviceOrientationEvent.requestPermission()
+      .then((response) => {
+        if (response === "granted") {
+          window.permissionGranted = true;
+        } else {
+          window.permissionGranted = false;
+        }
+      })
+      .catch(console.error);
+
+    this.remove();
+  }
+  fill(255);
+  nickname = random(handles);
+}
 
 function draw() {
   background(51);
@@ -62,6 +103,12 @@ function draw() {
 
   if (frameCount % updateRate === 0) {
     const data = {
+      accelerationX: accelerationX,
+      accelerationY: accelerationY,
+      accelerationZ: accelerationZ,
+      rotationX: rotationX,
+      rotationY: rotationY,
+      rotationZ: rotationZ,
       mouseX: mouseX,
       mouseY: mouseY,
       touches: touches,
